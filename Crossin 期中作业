@@ -1,0 +1,53 @@
+with open("report.txt",encoding="utf-8") as f:
+   f1=f.readlines() #   this returns a list in which every element is a line in that txt
+   #    print(f1)   #check whether if it's opened correctly
+
+A_new_list=[] # create a list to store the result without order
+
+for n in range(1,len(f1)):  # from the second to the end
+    #  print(f1[n]) # deal with every name and its scores, f1[n] is a string like "小赵 73 85..."
+    A_guy=f1[n].split()  # A_guy is 10-length list which contains his name and scores like [小赵,73,85...]
+    sum=0  # use "sum" to get the total score of A guy
+    average=0
+    for m in range(1,10):
+        sum=sum+int(A_guy[m])  # A_guy[m] is a score in string type
+        # if int(A_guy[m])<60:
+            # A_guy[m]="不及格"
+
+    average=round(sum/9,2)  #  use the function round()
+    A_guy.append(sum);  A_guy.append(average) # add his average score in the end of his list, now A_guy is a 12-length list
+    #print(A_guy)
+
+    A_new_list.append(A_guy)  # Anewlist is a list that has len(f1)-1 elements
+
+ranking = sorted(A_new_list, key=lambda x : x[11],reverse=True)  # now ranking is a list with the right order which contains many sub-lists in which the ranking number is missing
+## you should learn lambda!!  ##
+
+for rr in range(0,len(f1)-1):
+    ranking[rr].insert(0,rr+1)  #  add the ranking number at the beginning of each sub-list
+     # print(ranking[rr]) # checkpoint
+
+list_average=[0,"平均"]   # creat a list that should be the first element in ranking-list
+for i in range(2,11): # from the second to the tenth
+    sum_each = 0
+    for n in range(0,len(f1)-1): # n is the queue number of each guy-list
+        sum_each=sum_each+int(ranking[n][i])
+    average_each=round(sum_each/(len(f1)-1),2)
+    list_average.append(average_each)
+sum_total = 0   # the sum of the average scores of each lesson
+for i in range(2,10):
+    sum_total+=list_average[i]
+
+list_average.append(sum_total)
+list_average.append(round(sum_total/9,2))
+# print(list_average) #checkpoint
+
+ranking.insert(0,list_average)  # insert list_average to the beginning of ranking; now the ranking list has len(f1) sub-lists
+print(ranking)
+print(ranking[1][12])
+
+with open("result,txt","w",encoding="utf-8") as f:
+   for i in range(0,len(f1)):
+       for j in range(0,13):
+            f.write(str(ranking[i][j])+" ")
+       f.write("\n")
